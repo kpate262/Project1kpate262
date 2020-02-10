@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView android:id="@+id/enterNameQuery"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter a legal name(ex: John Doe): "
+        android:textSize="18dp"/>
+
+    <EditText android:id="@+id/legalName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"/>
+
+    <Button android:id="@+id/returnButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="doneButton"
+        android:text="Done"/>
+</LinearLayout>
