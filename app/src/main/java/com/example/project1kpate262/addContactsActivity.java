@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -58,6 +59,28 @@ public class addContactsActivity extends MainActivity {
             }
         });
 
+
+        /*legalNameText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                // TODO Auto-generated method stub
+                legalName = v.getText().toString();
+
+                Log.d("Editable text", String.format("Legal name entered %s", legalName));
+                //doneButton.setOnClickListener(doneListener);
+
+                if (actionId == event.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEND){
+                    Log.d("DoneButton", "Done button was clicked");
+                    doneButton(v);
+                    return true;
+                }
+                return false;
+            }
+
+
+        });*/
+
         legalNameText.setOnKeyListener(new View.OnKeyListener(){
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event){
@@ -73,7 +96,7 @@ public class addContactsActivity extends MainActivity {
     }
 
     protected void doneButton(View v){
-        String[] name = this.legalName.split(" ");
+        String[] name = legalName.split(" ");
         int counter = 0;
 
         for(String k: name){
