@@ -2,10 +2,13 @@ package com.example.project1kpate262;
 
 import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,10 +58,22 @@ public class addContactsActivity extends MainActivity {
             }
         });
 
+        legalNameText.setOnKeyListener(new View.OnKeyListener(){
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event){
+                if(keyCode == event.KEYCODE_ENTER){
+                    Log.d("DoneButton", "Done button was clicked");
+                    doneButton(v);
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     protected void doneButton(View v){
-        String[] name = legalName.split(" ");
+        String[] name = this.legalName.split(" ");
         int counter = 0;
 
         for(String k: name){
@@ -70,12 +85,34 @@ public class addContactsActivity extends MainActivity {
                 counter++;
                 this.lastName = k;
             }
+            else if(k.length() > 0 && counter == 2){
+                counter++;
+                isNameLegal = false;
+            }
         }
 
         if(counter == 2){
             isNameLegal = true;
         }
 
+        Intent contact = new Intent(ContactsContract.Intents.Insert.ACTION, ContactsContract.Contacts.CONTENT_LOOKUP_URI);
+        contact.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            contact.putExtras(extras);
+        }
+
+        if(isNameLegal){
+            contact.putExtra(ContactsContract.Intents.Insert.NAME, String.format("%s %s", this.firstName, this.lastName));
+            setResult(RESULT_OK, contact);
+            Log.d("onPause()", String.format("%s returned", RESULT_OK));
+        }
+        else{
+            contact.putExtra(ContactsContract.Intents.Insert.NAME, String.format("%s", this.legalName));
+            setResult(RESULT_CANCELED, contact);
+            Log.d("onPause()", String.format("%s returned", RESULT_CANCELED));
+        }
         finish();
     }
 
@@ -83,16 +120,12 @@ public class addContactsActivity extends MainActivity {
         // Called when down Button is selected
         @Override
         public void onClick(View v) {
-            doneButton(v);
             Log.d("DoneButton", "Done button was clicked");
+            doneButton(v);
         }
     } ;
 
     protected void onPause() {
         super.onPause();
-        if(isNameLegal){
-            setResult(RESULT_OK);
-            Log.d("onPause()", String.format("%s returned", RESULT_OK));
-        }
     }
 }
